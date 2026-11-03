@@ -23,12 +23,11 @@ Deployments use the newest `stable` version by default and are automatically upd
 
 ## v0.18
 
-Latest version: `0.18.0rc1`
+Latest version: `0.18.0rc2`
 
 <Callout icon="info" color="#F59E0B">
-This minor line is still a release candidate. The last stable release is `0.17.0`.
+This minor line is still a release candidate. The last stable release is `0.17.1`.
 </Callout>
-
 ### Changes
 
 #### New Features
@@ -93,6 +92,7 @@ This minor line is still a release candidate. The last stable release is `0.17.0
 - Fixes a bug where worker heartbeats could be lost on redis restart causing all active runs to be swept. Worker heartbeats now write to postgres. (The redis heartbeat is also preserved until `0.19.0` for backwards compatibility during upgrades).
 - Stops copying the run context and other internal run config into every checkpoint's metadata, so checkpoint rows no longer grow with the size of the run context.
 - Fixes startup failures with FastAPI included routers when custom-route authentication or auth-first middleware ordering is enabled, while preserving nested route path parameters for authentication and middleware.
+- Ignores a `fairness_weight` returned by a priority callback, with a warning, instead of failing the run.
 
 #### Security
 - Store operations from graphs now reject namespace labels that are empty or contain `.`, as the HTTP store API does, so such a label can no longer read or change another namespace's items.
@@ -103,6 +103,13 @@ This minor line is still a release candidate. The last stable release is `0.17.0
 - Patches Agent Server networking and tracing dependencies.
 
 <Accordion title="v0.18 releases">
+<Update label="2026-11-03" tags={["agent-server"]}>
+## v0.18.0rc2
+
+### Fixes
+- Ignores a `fairness_weight` returned by a priority callback, with a warning, instead of failing the run.
+
+</Update>
 <Update label="2026-10-30" tags={["agent-server"]}>
 ## v0.18.0rc1
 
@@ -182,7 +189,7 @@ This minor line is still a release candidate. The last stable release is `0.17.0
 
 ## v0.17
 
-Latest version: `0.17.0`
+Latest version: `0.17.1`
 ### Changes
 
 #### New Features
@@ -222,14 +229,26 @@ Latest version: `0.17.0`
 - Fixed Postgres connections closed server-side (e.g. by idle_session_timeout) being reused from the pool.
 - Fixes AES-encrypted JSON data losing number formatting and precision (for example, `4.0` stored as `4`).
 - Fixed `langgraph dev` losing data: thread state and long-term store items are now saved to `.langgraph_api/` every 10 seconds as intended, and a restart no longer deletes every thread when saved state references a class from the graph file or one that was moved or renamed (an unreadable file is kept as a `.bak` copy).
+- Allows redis-py 8.x in Agent Server images and user graph dependencies.
 
 #### Security
 - Store operations from graphs now reject namespace labels that are empty or contain `.`, as the HTTP store API does, so such a label can no longer read or change another namespace's items.
+- Updates Agent Server Go builds, Datadog initialization, uv, and telemetry certificate dependencies.
 
 #### General Notes
 - Removes the built-in Python Postgres store; the Go store is now always used and `LANGGRAPH_STORE_BACKEND` is ignored. Custom stores and the in-memory runtime are unaffected.
 
 <Accordion title="v0.17 releases">
+<Update label="2026-11-03" tags={["agent-server"]}>
+## v0.17.1
+
+### Fixes
+- Allows redis-py 8.x in Agent Server images and user graph dependencies.
+
+### Security
+- Updates Agent Server Go builds, Datadog initialization, uv, and telemetry certificate dependencies.
+
+</Update>
 <Update label="2026-10-29" tags={["agent-server"]}>
 ## v0.17.0
 
@@ -336,7 +355,7 @@ Latest version: `0.17.0`
 
 ## v0.16
 
-Latest version: `0.16.9`
+Latest version: `0.16.10`
 ### Changes
 
 #### New Features
@@ -398,8 +417,18 @@ Latest version: `0.16.9`
 - Updates undici in the JS graph server to a patched version to address published security advisories.
 - Updates Agent Server's Go toolchain to mitigate CVE-2026-111943 in certificate-chain verification.
 - Updates certifi, Hono and Vite to patched versions to address published security advisories.
+- Patches Agent Server networking and tracing dependencies.
+- Pins the optional OpenTelemetry tracer's certificate bundle.
 
 <Accordion title="v0.16 releases">
+<Update label="2026-11-03" tags={["agent-server"]}>
+## v0.16.10
+
+### Security
+- Patches Agent Server networking and tracing dependencies.
+- Pins the optional OpenTelemetry tracer's certificate bundle.
+
+</Update>
 <Update label="2026-10-28" tags={["agent-server"]}>
 ## v0.16.9
 
